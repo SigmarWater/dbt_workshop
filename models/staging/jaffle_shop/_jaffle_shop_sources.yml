@@ -1,0 +1,21 @@
+version: 2
+
+sources:
+  - name: jaffle_shop
+    description: Jaffle Shop
+    loader: Manual
+    database: dbt_course
+    schema: jaffle_shop
+    
+    tables:
+      - name: customers
+      - name: orders
+        loaded_at_field: order_date
+        freshness:
+    # Если разница между текущим моментом 
+    # и максимальной датой order_date 12 часов - это warning
+    # Но pipeline пройдет
+          warn_after: {count: 12, period: hour}
+    
+    # Если 24 часа - ошибка и pipeline упадет 
+          error_after: {count: 24, period: hour}
